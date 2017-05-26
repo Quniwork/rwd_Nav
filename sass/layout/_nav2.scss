@@ -1,0 +1,324 @@
+/*
+    ▼ 選單顯示方式
+    1. push-left: 往左推
+    2. cover-left: 覆蓋往左(無法使用topbar)
+    3. cover-drop: 覆蓋往下
+
+    $mainnav: right/left/top (出來方向:右/左/上)
+    $effect: cover/push (覆蓋/推)
+*/
+$mainnav: right;
+$effect: cover;
+$mainnav-w: 240px;
+
+.header {
+    height: 50px;
+    position: relative;
+    background-color: $header-bg-desktop;
+    // LOGO文字設置
+    > h1 a {
+        color: $header-logo-desktop;
+        text-align: left;
+        font-size: 27px;
+        line-height: 50px;
+        font-weight: bold;
+        padding-left: 20px;
+    }
+}
+
+.navBtn {
+    position: absolute;
+    top: 0;
+    z-index: 3;
+    float: left;
+    background-color: $mainnav-header-bg;
+    display: none;
+    @include transition(background-color .5s ease);
+    cursor: pointer;
+    // 按鈕狀態
+    @if $mainnav-button == 1 {
+        padding: 9.5px;
+    } @else {
+        padding: 8px;
+        top: 7px;
+        left: 7px;
+    }
+    li {
+        width: 30px;
+        height: 1px;
+        background-color: #fff;
+        border-radius: 3px;
+        margin: 7px 0;
+        @include transition(all .5s ease);
+    }
+    &.open {
+        background-color: $mainnav-header-hover;
+        li {
+            background-color: $mainnav-color;
+        }
+        @if $mainnav-button-close == 1 {
+            li {
+                &:first-child {
+                  transform: translate(3px, -2px) rotate(45deg);
+                  transform-origin: 0% 0%;
+                }
+                &:nth-child(2) {
+                  opacity:0;
+                }
+                &:last-child {
+                  transform: translate(3px, 2px) rotate(-45deg);
+                  transform-origin: 0% 0%;
+                }
+            }
+        }
+    }
+}
+
+.mainnav {
+    @include MQ(md) {
+        position: absolute;
+        top: 0;
+        right: 5px;
+        li {
+            float: left;
+            display: inline-block;
+            a {
+                font-size: 11px;
+                color: #9aa6af;
+                padding: 15.5px 15px;
+                display: block;
+                &:hover {
+                    color: #000;
+                }
+            }
+            .lsub-inner-wrap {
+                height: 0;
+                min-height: 0;
+                overflow: hidden;
+            }
+            &:hover {
+                .lsub-inner-wrap {
+                    max-height: 500px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 780px) {
+    body {
+        background-color: #000;
+    }
+    .header {
+        @if $effect == cover {
+            position: absolute;
+        } @else if $effect == push {
+            position: fixed;
+            @include transform(translate3d(0, 0, 0));
+        }
+        z-index: 2;
+        height: 50px;
+        background-color: $header-bg-mobile;
+        top: 0;
+        right: 0;
+        left: 0;
+        > h1 a {
+            color: $header-logo-mobile;
+            text-align: center;
+            padding-left: 0;
+            display: block;
+        }
+    }
+    .navBtn {
+        display: block;
+        @if $mainnav == right {
+            right: 0;
+        }
+    }
+    .header-section {
+        margin-top: 50px;
+    }
+    .mainnav {
+        position: relative;
+        z-index: 1;
+        width: $mainnav-w;
+        @if $mainnav == left {
+            left: 0;
+            @include transform(translate3d(5%, 0, 0)scale(.97));
+        } @else if $mainnav == right {
+            right: 0;
+            @include transform(translate3d(5%, 0, 0)scale(.97));
+        }
+
+        height: 100%;
+        position: fixed;
+
+        top: 0;
+        margin: 0;
+        background-color: $header-nav-bg;
+
+        @if $effect == push {
+            opacity: .3;
+        }
+        &.open {
+            opacity: 1;
+            @include transform(translate3d(0, 0, 0)scale(1));
+            @include animation(slideIn .35s ease-in-out);
+            @if $effect == cover {
+                z-index: 2;
+            }
+        }
+        ul {
+            height: 100%;
+            overflow-y: auto;
+        }
+        li {
+            display: block;
+            float: none;
+            a {
+                &.logo {
+                    display: none;
+                }
+                &.active, &:hover {
+                    color: $header-nav-txt-hover;
+                    background-color: $header-nav-title;
+                }
+            }
+        }
+    }
+    @include keyframes(slideIn) {
+        @if $effect == cover {
+            0% {
+                @if $mainnav == left {
+                    @include transform(translate3d(-100%, 0, 0));
+                } @else if $mainnav == right {
+                    @include transform(translate3d(100%, 0, 0));
+                }
+            }
+            100% {
+                @include transform(translate3d(0, 0, 0));
+            }
+            @if $mainnav == left {
+                @include transform(translate3d(-100%, 0, 0));
+            } @else if $mainnav == right {
+                @include transform(translate3d(100%, 0, 0));
+            }
+        } @else if $effect == push {
+            0% {
+                opacity: .3;
+                @include transform(translate3d(5%, 0, 0)scale(.97));
+            }
+            100% {
+                opacity: 1;
+                @include transform(translate3d(0, 0, 0)scale(1));
+            }
+        }
+    }
+    .mainnav.close {
+        @if $effect == cover {
+            z-index: 2;
+            @if $mainnav == left {
+                @include transform(translate3d(-100%, 0, 0));
+            } @else if $mainnav == right {
+                @include transform(translate3d(100%, 0, 0));
+            }
+        } @else if $effect == push {
+            opacity: .3;
+            @include transform(translate3d(5%, 0, 0)scale(.97));
+        }
+        @include animation(slideOut .3s ease-in-out);
+    }
+    @include keyframes(slideOut) {
+        @if $effect == cover {
+            0% {
+                @include transform(translate3d(0, 0, 0));
+            }
+            100% {
+                @if $mainnav == left {
+                    @include transform(translate3d(-100%, 0, 0));
+                } @else if $mainnav == right {
+                    @include transform(translate3d(100%, 0, 0));
+                }
+            }
+        } @else if $effect == push {
+            0% {
+                opacity: 1;
+                @include transform(translate3d(0, 0, 0)scale(1));
+            }
+            100% {
+                opacity: .3;
+                @include transform(translate3d(5%, 0, 0)scale(.97));
+            }
+        }
+    }
+    .content {
+        position: relative;
+        z-index: 1;
+        min-height: calc(100vh - 50px);
+        @include transform(translate3d(0, 0, 0));
+    }
+    @if $effect == cover {
+        .header.open {
+            z-index: initial;
+        }
+        .header.open,
+        .content.open {
+            &:before {
+                background: rgba(0,0,0,.5);
+                content: '';
+                height: 100vh;
+                width: 100%;
+                position: absolute;
+                pointer-events: none;
+            }
+        }
+    } @else if $effect == push {
+        .header.open,
+        .content.open {
+            @include animation(open .5s ease-in-out);
+            @if $mainnav == left {
+                @include transform(translate3d($mainnav-w, 0, 0));
+            } @else if $mainnav == right {
+                @include transform(translate3d(-$mainnav-w, 0, 0));
+            }
+        }
+        @include keyframes(open) {
+            0% {
+                @include transform(translate3d(0, 0, 0));
+            }
+            @if $mainnav == left {
+                70% {
+                    @include transform(translate3d($mainnav-w + 20, 0, 0));
+                }
+                100% {
+                    @include transform(translate3d($mainnav-w, 0, 0));
+                }
+            } @else if $mainnav == right {
+                70% {
+                    @include transform(translate3d(-($mainnav-w + 20), 0, 0));
+                }
+                100% {
+                    @include transform(translate3d(-$mainnav-w, 0, 0));
+                }
+            }
+        }
+        .header.close,
+        .content.close {
+            @include transform(translate3d(0, 0, 0));
+            @include animation(close .3s ease-in-out);
+        }
+        @include keyframes(close) {
+            0% {
+                @if $mainnav == left {
+                    @include transform(translate3d($mainnav-w, 0, 0));
+                } @else if $mainnav == right {
+                    @include transform(translate3d(-$mainnav-w, 0, 0));
+                }
+            }
+            100% {
+                @include transform(translate3d(0, 0, 0));
+            }
+        }
+    }
+}
+

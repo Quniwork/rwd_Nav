@@ -1,0 +1,47 @@
+//- common
+// colors-主風格或常用的配色
+$brand-colors: (
+    "blue":   #2d6e9c,  //- 藍
+    "red":   #f73881,   //- 紅
+    "purple": #6d5e97,  //- 紫
+    "green":  #009688,  //- 綠
+)!default;
+//- color: map-get($brand-colors, white)
+@function brand-colors($key: white) {
+    @return map-get($brand-colors, $key);
+}
+//- 主色系
+$brand-base: brand-colors("blue");
+
+//- fonts-字體、字級、行高設定
+$font-size-lg       : 1.25rem !default;
+$font-size-sm       : .875rem !default;
+$font-size-xs       : .75rem !default;
+
+$font-family: Helvetica Neue, Helvetica, Arial, 微軟雅黑體, Microsoft JhengHei, sans-serif;
+$light-height: 1.5 !default;
+
+//- GOOGLE FONTS
+@import url('https://fonts.googleapis.com/css?family=Julius+Sans+One');
+
+//- custom media queries
+$custom-media: 1200px;
+
+//- desktop
+$header-logo-desktop: #9aa6af;
+$header-bg-desktop: #f3f5f6;
+
+//- mobile
+$header-logo-mobile: #fff;
+
+$mainnav-button: 1; // full=1, padding=0
+$mainnav-button-close: 1; // close=1, not close=0
+$mainnav-color: #d9dde1;
+$mainnav-header-bg: #333;
+$mainnav-header-hover: $brand-base;
+
+$header-bg-mobile: #333;
+$header-nav-bg: #333;
+$header-nav-title: #292929;
+$header-nav-txt-hover: #fff;
+$header-nav-hover: #292929;
